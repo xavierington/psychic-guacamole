@@ -1,1 +1,12 @@
 
+{
+  "EmployeeName": "name",
+  "SSN": "ssn",
+  "Address": "address",
+  "City": "city",
+  "PayRate": "pay_rate",
+  "RegularHours": "regular_hours",
+  "GrossPay": "gross_pay",
+  "OtherDeduction1Desc": "amf_494_rate",
+  "OtherDeduction1Value": "amf_494_amount"
+}
