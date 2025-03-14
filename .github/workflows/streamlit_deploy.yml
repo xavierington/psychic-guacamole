@@ -1,0 +1,38 @@
+name: Deploy Streamlit App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+    - name: Test application
+      run: |
+        python -c "import streamlit; import pdfplumber; import pandas; print('Dependencies successfully imported')"
+        
+    - name: Deploy to Streamlit Cloud
+      if: success() && github.ref == 'refs/heads/main'
+      uses: streamlit/streamlit-deploy-action@v1
+      with:
+        app-name: payroll-pdf-extractor
+        s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
